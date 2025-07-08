@@ -4,13 +4,20 @@ import {colors} from '../styles/theme'
 import Button from '../components/Button'
 import Github from '../components/Icons/GitHub'
 // devit
-import { loginWithGitHub } from '../firebase/client'
+import { loginWithGitHub } from '../firebase/app'
 
 export default function Home() {
-  const handleClick = () => {
-    loginWithGitHub().then(setUser).catch(err => {
-      console.log(err)
-    })
+
+   const handleClick = () => {
+    loginWithGitHub()
+      .then((result) => {
+        // El usuario se autenticó exitosamente
+        setUser(result.user)
+        console.log('Usuario autenticado:', result.user)
+      })
+      .catch((error) => {
+        console.error('Error al autenticar:', error)
+      })
   }
 
   return (
