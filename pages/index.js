@@ -1,3 +1,4 @@
+import {useState} from 'react'
 import Head from 'next/head'
 import AppLayout from '../components/AppLayout'
 import {colors} from '../styles/theme'
@@ -7,6 +8,7 @@ import Github from '../components/Icons/GitHub'
 import { loginWithGitHub } from '../firebase/app'
 
 export default function Home() {
+  const [user, setUser] = useState(undefined)
 
    const handleClick = () => {
     loginWithGitHub()
@@ -34,9 +36,23 @@ export default function Home() {
         <h2>Talk about development with developers</h2>
 
          <div>  
-         <Button onClick={handleClick}>
-          <Github fill='#fff' width={24} height={24}/>
-          Login with Github</Button>
+          {
+          !user && (
+            <Button onClick={handleClick}>
+              <Github fill='#fff' width={24} height={24}/>
+              Login with Github
+            </Button>
+          )
+          }
+
+             {
+            user && user.avatar && 
+              <div>
+                <img src={user.avatar} />
+                <strong>{user.username}</strong>
+              </div>
+             }
+          
           </div>
          
         </section> 
@@ -44,8 +60,8 @@ export default function Home() {
 
       <style jsx>{`
   img {
-    width: 80px;
-    height: 280px;
+    width: 200px;
+    height: 250px;
     display: block;
     border-radius: 20%;
     margin: 0 auto;
@@ -68,8 +84,12 @@ export default function Home() {
   h2 {
     color: #82ee1e;
     font-weight: 600;
-    margin: 0;
+    margin: auto;
   }
+
+  div {
+    margin-top: 16px;
+      }
 `}</style>
     </>
   )

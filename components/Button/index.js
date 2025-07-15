@@ -1,8 +1,11 @@
+import React from "react"
+import PropTypes from "prop-types"
+
 export default function Button ({children, onClick}) {
   return (
     <button onClick={onClick}>
       {children}
-      <style jsx>{`
+      <style >{`
         button {
           align-items: center;
           background: black;
@@ -15,15 +18,19 @@ export default function Button ({children, onClick}) {
           font-weight: 500;
           padding: 8px 24px;
           transition: opacity .3s ease;
-    
         }
-          button > :global(svg) {
+        button > svg {
           margin-right: 8px;
-      }
+        }
         button:hover {
-          opacity:.7;
+          opacity: .7;
         }
       `}</style>
     </button>
   )
+}
+
+Button.propTypes = {
+  children: PropTypes.node.isRequired,
+  onClick: PropTypes.func
 }

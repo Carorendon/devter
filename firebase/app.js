@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app'
-
+import { getAuth, GithubAuthProvider, signInWithPopup } from 'firebase/auth'
 
 const firebaseConfig = {
   apiKey: "AIzaSyBJPoaRv9o54IMuBrmeMzFpz8wmcVP8sug",
@@ -11,14 +11,16 @@ const firebaseConfig = {
   measurementId: "G-CBLEJF5H2R"
 };
 
-!
-  firebase.initializeApp(firebaseConfig)
 
+const app = initializeApp(firebaseConfig)
 
+// Inicializar Auth
+const auth = getAuth(app)
 
+// Función para login con GitHub
 export const loginWithGitHub = () => {
-  const githubProvider = new firebase.auth.GithubAuthProvider()
-  return firebase
-    .auth()
-    .signInWithPopup(githubProvider)
+  const githubProvider = new GithubAuthProvider()
+  return signInWithPopup(auth, githubProvider)
 }
+
+export { auth }
