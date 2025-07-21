@@ -1,11 +1,12 @@
-import React from "react"
-import PropTypes from "prop-types"
+import { colors } from "../../styles/theme"
 
-export default function Button ({children, onClick}) {
+export default function Button({ children, disabled, onClick }) {
   return (
-    <button onClick={onClick}>
-      {children}
-      <style >{`
+    <>
+      <button disabled={disabled} onClick={onClick}>
+        {children}
+      </button>
+      <style jsx>{`
         button {
           align-items: center;
           background: black;
@@ -15,22 +16,25 @@ export default function Button ({children, onClick}) {
           cursor: pointer;
           display: flex;
           font-size: 16px;
-          font-weight: 500;
+          font-weight: 800;
           padding: 8px 24px;
-          transition: opacity .3s ease;
+          transition: opacity 0.3s ease;
+          user-select: none;
         }
-        button > svg {
+
+        button[disabled] {
+          pointer-events: none;
+          opacity: 0.2;
+        }
+
+        button > :global(svg) {
           margin-right: 8px;
         }
+
         button:hover {
-          opacity: .7;
+          opacity: 0.7;
         }
       `}</style>
-    </button>
+    </>
   )
-}
-
-Button.propTypes = {
-  children: PropTypes.node.isRequired,
-  onClick: PropTypes.func
 }

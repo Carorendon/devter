@@ -1,15 +1,17 @@
-import Link from 'next/link'
-import AppLayout from '../../components/AppLayout'
+/* eslint-disable react/no-unknown-property */
+/* eslint-disable react/react-in-jsx-scope */
+/* eslint-disable react/prop-types */
 
-export default function Timeline ({ userName }) {
+import Link from "next/link"
+import AppLayout from "../../components/AppLayout"
+
+export default function Timeline({ userName }) {
   return (
     <>
       <AppLayout>
         <h1>This is the timeline of {userName}</h1>
-        <Link href='/'>
-          
-            Go home
-          
+        <Link href="/">
+          <a>Go home</a>
         </Link>
       </AppLayout>
       <style jsx>{`
@@ -23,6 +25,5 @@ export default function Timeline ({ userName }) {
 }
 
 Timeline.getInitialProps = () => {
-  return fetch('http://localhost:3001/api/hello')
-    .then(res => res.json())
+  return fetch("http://localhost:3000/api/hello").then((res) => res.json())
 }
