@@ -1,6 +1,8 @@
 import { initializeApp, getApps, getApp } from 'firebase/app'
 import { getAuth, signInWithPopup, GithubAuthProvider, onAuthStateChanged as firebaseOnAuthStateChanged } from 'firebase/auth'
-import { getFirestore, collection, addDoc, getDocs, Timestamp } from 'firebase/firestore'
+import { getFirestore, collection, addDoc, getDocs, Timestamp, doc , orderBy, query, limit, onSnapshot } from 'firebase/firestore'
+import { getStorage, ref, uploadBytesResumable } from 'firebase/storage'
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyBJPoaRv9o54IMuBrmeMzFpz8wmcVP8sug",
@@ -19,6 +21,7 @@ const app = !getApps().length ? initializeApp(firebaseConfig) : getApp()
 const auth = getAuth(app)
 const db = getFirestore(app)
 
+
 const mapUserFromFirebaseAuthToUser = (user) => {
   const { displayName, email, photoURL, uid } = user
 
@@ -27,6 +30,18 @@ const mapUserFromFirebaseAuthToUser = (user) => {
     username: displayName,
     email,
     uid,
+  }
+}
+
+const mapDevitFromFirebaseToDevitObject = (doc) => {
+  const data = doc.data()
+  const id = doc.id
+  const { createdAt } = data
+
+  return {
+    ...data,
+    id,
+    createdAt: +createdAt.toDate()
   }
 }
 
@@ -44,16 +59,30 @@ export const listenToAuthChanges = (onChange) => {
   })
 }
 
+export const listenLatestDevits = (callback) => {
+  const q = query(
+    collection(db, "devits"),
+    orderBy("createdAt", "desc"),
+    limit(20)
+  )
+  
+  return onSnapshot(q, (snapshot) => {
+    const newDevits = snapshot.docs.map(mapDevitFromFirebaseToDevitObject)
+    callback(newDevits)
+  })
+}
+
 export const loginWithGitHub = () => {
   const githubProvider = new GithubAuthProvider()
   return signInWithPopup(auth, githubProvider)
 }
 
-export const addDevit = async ({ avatar, content, userId, userName }) => {
+export const addDevit = async ({ avatar, content, userId, img, userName }) => {
   try {
     const docRef = await addDoc(collection(db, "devits"), {
       avatar,
       content,
+      img,
       userId,
       userName,
       createdAt: Timestamp.fromDate(new Date()), // ✅ Sintaxis correcta v9+
@@ -69,20 +98,28 @@ export const addDevit = async ({ avatar, content, userId, userName }) => {
 }
 
 export const fetchLatestDevits = async () => {
-  const querySnapshot = await getDocs(collection(db, "devits"))
+  const devitsCollection = collection(db, "devits")
+  const q = query(devitsCollection, orderBy("createdAt", "desc"))
+  const snapshot = await getDocs(q)
   
-  return querySnapshot.docs.map((doc) => {
+  return snapshot.docs.map((doc) => {
     const data = doc.data()
     const id = doc.id
-    const { createdAt } = data
-
-    const date = new Date(createdAt.seconds * 1000)
-    const normalizedCreatedAt = new Intl.DateTimeFormat("es-ES").format(date)
+    const {createdAt} = data
 
     return {
       ...data,
       id,
-      createdAt: normalizedCreatedAt,
+      createdAt: +createdAt.toDate()
+      
     }
   })
+}
+
+export const uploadImage = (file) => {
+  const storage = getStorage()
+  const storageRef = ref(storage, `images/${file.name}`)
+  const task = uploadBytesResumable(storageRef, file)
+  
+  return task
 }

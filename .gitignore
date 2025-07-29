@@ -40,3 +40,10 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 .eslintcache
+
+# Environment variables
+.env.local
+.env
+
+# Firebase keys
+firebase-Keys.json

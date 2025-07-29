@@ -32,7 +32,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <AppLayout>
+      
         <section>
           <img src='/Lemon.jpg' alt='logo' />
           <h1>Devter</h1>
@@ -48,7 +48,7 @@ export default function Home() {
             {user === USER_STATES.NOT_KNOWN && <img src="" />}
             </div>  
         </section>
-      </AppLayout>
+      
 
       <style jsx>{`
         img {
