@@ -1,25 +1,25 @@
-const { firestore } = require('../../../firebase/admin');
+import { db } from '../../../firebase/admin'
 
-export default (request, response) => {
+export default async (request, response) => {
   const { query } = request
   const { id } = query
-  const db = admin.firestore()  
-  firestore
-    .collection("devits")
-    .doc(id)
-    .get()
-    .then((doc) => {
-      const data = doc.data()
-      const id = doc.id
-      const { createdAt } = data
-
-      response.json({
-        ...data,
-        id,
-        createdAt: +createdAt.toDate(),
-      })
+  
+  try {
+    const doc = await db.collection("devits").doc(id).get()
+    
+    if (!doc.exists) {
+      return response.status(404).json({ error: 'Devit no encontrado' })
+    }
+    
+    const data = doc.data()
+    
+    response.json({
+      ...data,
+      id: doc.id,
+      createdAt: +data.createdAt.toDate(),
     })
-    .catch(() => {
-      response.status(404).end()
-    })
+  } catch (error) {
+    console.error('Error al obtener devit:', error)
+    response.status(500).json({ error: 'Error interno del servidor' })
+  }
 }

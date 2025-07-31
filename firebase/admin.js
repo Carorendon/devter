@@ -1,23 +1,15 @@
 // firebase/admin.js - Asegúrate de que exportas 'db'
-import admin from 'firebase-admin'
+const admin = require("firebase-admin")
 
-const firebaseAdminConfig = {
-  projectId: process.env.FIREBASE_PROJECT_ID,
-  clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-  privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
-}
+const serviceAccount = require("credentials/serviceAccountKey.json");
 
-if (!admin.apps.length) {
+console.log(process.env.FIREBASE_DATABASE_URL)
+
+try {
   admin.initializeApp({
-    credential: admin.credential.cert(firebaseAdminConfig),
-    databaseURL: `https://${firebaseAdminConfig.projectId}.firebaseio.com`
+    credential: admin.credential.cert(serviceAccount),
+    databaseURL: process.env.FIREBASE_DATABASE_URL,
   })
-}
+} catch (e) {}
 
-const db = admin.firestore() // ✅ Esto es lo que necesitas
-const auth = admin.auth()
-
-// ✅ Exportar tanto db como firestore (por compatibilidad)
-export { db, auth }
-export const firestore = db // Por si usas este nombre en otros archivos
-export default admin
+export const firestore = admin.firestore()

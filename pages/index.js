@@ -28,14 +28,14 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>devter 🍋</title>
+        <title>Social App 😺</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       
         <section>
-          <img src='/Lemon.jpg' alt='logo' />
-          <h1>Devter</h1>
+          <img src='/Gato social.jpg' alt='logo' />
+          <h1>Social App</h1>
           <h2>Talk about development with developers</h2>
 
           <div>
@@ -53,7 +53,7 @@ export default function Home() {
       <style jsx>{`
         img {
           width: 200px;
-          height: 250px;
+          height: 270px;
           display: block;
           border-radius: 20%;
           margin: 0 auto;
@@ -68,13 +68,13 @@ export default function Home() {
         }
 
         h1 {
-          color: #035a15;
+          color: #141b16;
           font-weight: 800;
           margin-bottom: 16px;
         }
 
         h2 {
-          color: #82ee1e;
+          color: #315c07;
           font-weight: 600;
           margin: auto;
         }

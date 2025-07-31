@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-// Ajusta ruta si es necesario
 import { useRouter } from "next/router";
 import { onAuthStateChanged } from "/firebase/app"
 
@@ -12,11 +11,16 @@ export default function useUser() {
   const [user, setUser] = useState(USER_STATES.NOT_KNOWN);
   const router = useRouter();
 
-
-
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(setUser);
-    return () => unsubscribe(); // limpia listener
+    const unsubscribe = onAuthStateChanged((user) => {
+      setUser(user)
+    });
+    
+    return () => {
+      if (unsubscribe) {
+        unsubscribe();
+      }
+    };
   }, []);
 
   useEffect(() => {
@@ -27,5 +31,3 @@ export default function useUser() {
 
   return user;
 }
-
-

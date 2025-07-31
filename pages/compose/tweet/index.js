@@ -123,7 +123,7 @@ export default function ComposeTweet() {
     <>
       
         <Head>
-          <title>Crear un Devit / Devter</title>
+          <title>Crear un Post / SocialApp</title>
         </Head>
         <section className="form-container">
           {user && (
@@ -168,7 +168,7 @@ export default function ComposeTweet() {
             )}
             
             <div>
-              <Button disabled={isButtonDisabled}>Devitear</Button>
+              <Button disabled={isButtonDisabled}>Repostear</Button>
             </div>
           </form>
         </section>
