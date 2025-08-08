@@ -1,7 +1,7 @@
 
 import Avatar from "components/Avatar"
 import useTimeAgo from "/hooks/useTimeAgo"
-import useDateTimeFormat from "../hooks/useDateTimeFormat"
+import useDateTimeFormat from "../../hooks/useTimeAgo"
 import Link from "next/link"
 import { useRouter } from "next/router"
 
