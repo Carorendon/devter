@@ -8,6 +8,10 @@ const nextConfig = {
       config.resolve.fallback = {
         ...config.resolve.fallback,
         fs: false,
+        net: false,
+        http2: false,
+        tls: false,
+    
       }
     }
     return config

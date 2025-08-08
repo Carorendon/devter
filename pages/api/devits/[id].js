@@ -1,25 +1,31 @@
+// ✅ Importación normal en API routes (solo servidor)
 import { db } from '../../../firebase/admin'
 
-export default async (request, response) => {
-  const { query } = request
-  const { id } = query
-  
+export default async function handler(req, res) {
+  const { id } = req.query
+
+  if (req.method !== 'GET') {
+    return res.status(405).json({ error: 'Method not allowed' })
+  }
+
   try {
     const doc = await db.collection("devits").doc(id).get()
     
     if (!doc.exists) {
-      return response.status(404).json({ error: 'Devit no encontrado' })
+      return res.status(404).json({ error: 'Devit no encontrado' })
     }
     
     const data = doc.data()
     
-    response.json({
+    const devit = {
       ...data,
       id: doc.id,
-      createdAt: +data.createdAt.toDate(),
-    })
+      createdAt: data.createdAt ? +data.createdAt.toDate() : Date.now(),
+    }
+
+    res.json(devit)
   } catch (error) {
     console.error('Error al obtener devit:', error)
-    response.status(500).json({ error: 'Error interno del servidor' })
+    res.status(500).json({ error: 'Error interno del servidor' })
   }
 }

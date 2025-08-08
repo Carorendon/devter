@@ -46,4 +46,14 @@ next-env.d.ts
 .env
 
 # Firebase keys
-firebase-Keys.json
+
+
+# Dependencies
+node_modules/
+
+# Next.js
+.next/
+out/
+
+# Logs
+*.log
